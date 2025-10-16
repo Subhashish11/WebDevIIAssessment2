@@ -1,37 +1,19 @@
-// Implementing express
-const express = require('express');
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 
-// Implementing CORS
-const cors = require('cors');
-
-// Implementing body-parser
-const bodyParser = require('body-parser');
-
-// Creating an app
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(bodyParser.json());
 app.use(express.static("public"));
 
-// Defining a simple GET route
-app.get('/', (req, res) => {
-  res.sendFile(_dirname+"public/index.html");
-});
+// API router
+const charityAPI = require("./controllerAPI/api-controller");
+app.use("/api", charityAPI);
 
-//initialising controller api
-const charityAPI=require("./controllerAPI/api-controller");
-
-//implementing controller api
-app.use("/api",charityAPI);
-
-// Defining the port
+// Start server
 const PORT = 3030;
-
-// Starting the server
-app.listen(PORT, () => {
-  console.log(`Connection is live on port ${PORT}`);
-});
-
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,8 +1,7 @@
-// event_db.js
-const mysql = require('mysql2');
-const dbDetails = require('./db_details.js'); // import the DB credentials
+const mysql = require("mysql2");
+const dbDetails = require("./db_details");
 
-// Create a connection to MySQL using details from db_details.js
+// Create connection
 const connection = mysql.createConnection({
   host: dbDetails.host,
   user: dbDetails.user,
@@ -10,14 +9,19 @@ const connection = mysql.createConnection({
   database: dbDetails.database
 });
 
-// Exception handling
-connection.connect((err) => {
+// Connect and test
+connection.connect(err => {
   if (err) {
-    console.error('Failed to establish connection:', err.message);
-    return;
+    console.error("DB connection error:", err);
+  } else {
+    console.log("Connected to MySQL database!");
+
+    // ✅ Test query
+    connection.query("SELECT 1 + 1 AS test", (err, results) => {
+      if (err) console.error("DB connection test error:", err);
+      else console.log("DB connection test:", results);
+    });
   }
-  console.log('Connected to MySQL database!');
 });
 
-// Export the connection for use in other files
 module.exports = connection;
