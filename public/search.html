@@ -8,22 +8,32 @@
 <nav>
     <a href="index.html">Home</a> |
     <a href="search.html">Search Events</a> |
-    <a href="event.html">Events</a> |
+
 </nav>
+
 <div class="event-search">
     <h1>Search Events</h1>
     <form id="search-form">
-        <label>Date:<input type="date" id="date" name="date"></label>
-        <label>Location:<input type="text" name="location"></label>
-        <label>Event Category:<input type="text" name="Category"></label>
-
+        <label>Date: <input type="date" id="date" name="date"></label>
+        <label>Location: <input type="text" id="location" name="location"></label>
+        <label>Event Category:
+            <select id="category" name="category">
+                <option value="">--All Categories--</option>
+                <!-- Options will be populated dynamically -->
+            </select>
+        </label>
+        <button type="submit">Search</button>
+        <button type="button" id="clear-btn">Clear Filters</button>
     </form>
 
-
+    <!-- Container to show search results -->
+    <div id="search-results"></div>
 </div>
+
 <footer>
     <p>&copy; 2025 Social Sewa | All Rights Reserved</p>
 </footer>
-</body>
 
+<script src="search.js"></script>
+</body>
 </html>

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const eventDB = require("../event_db");
 
-// 1️⃣ Upcoming events
+// 1️ Upcoming events
 router.get("/event/upcoming", (req, res) => {
   const query = `
     SELECT e.event_id, e.event_name, e.event_description, e.event_date, e.location, e.image_url, c.category_name
@@ -21,7 +21,7 @@ router.get("/event/upcoming", (req, res) => {
   });
 });
 
-// 2️⃣ Search events by date, location, category
+// 2️ Search events by date, location, category
 router.get("/event/search", (req, res) => {
   const { date, location, category } = req.query;
   let query = `
@@ -56,7 +56,7 @@ router.get("/event/search", (req, res) => {
   });
 });
 
-// 3️⃣ Event details by ID
+// 3️Event details by ID
 router.get("/event/:id", (req, res) => {
   const eventId = req.params.id;
 
@@ -79,6 +79,18 @@ router.get("/event/:id", (req, res) => {
 
     res.json(results[0]);
   });
+});
+
+//GET all categories dynamically
+router.get("/categories", (req, res) => {
+    const query = "SELECT category_id, category_name FROM categories";
+    eventDB.query(query, (err, results) => {
+        if (err) {
+            console.error("SQL Error:", err.message);
+            return res.status(500).send("Database query error");
+        }
+        res.json(results);
+    });
 });
 
 module.exports = router;
