@@ -1,0 +1,22 @@
+body{
+font-family:Arial,sans-serif;
+margin:0;
+padding:incline:0px;
+background-color:}
+
+nav{
+background-color:#800000;
+padding:20px;
+text-align:center;
+}
+nav a{
+color:#ffff;
+text-decoration:none;}
+
+footer{
+color:#ffff;
+text-align:center;
+padding:20px;
+background-color:#800000;
+margin-top:auto;
+}
