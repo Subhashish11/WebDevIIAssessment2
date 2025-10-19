@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const eventDB = require("../event_db");
 
-// 1️ Upcoming events
+//  Display upcoming events
 router.get("/event/upcoming", (req, res) => {
   const query = `
     SELECT e.event_id, e.event_name, e.event_description, e.event_date, e.location, e.image_url, c.category_name
@@ -21,7 +21,7 @@ router.get("/event/upcoming", (req, res) => {
   });
 });
 
-// 2️ Search events by date, location, category
+// SEARCH events by data, location and category criteria
 router.get("/event/search", (req, res) => {
   const { date, location, category } = req.query;
   let query = `
@@ -56,7 +56,7 @@ router.get("/event/search", (req, res) => {
   });
 });
 
-// 3️Event details by ID
+// GET details by Primary key which is event_id
 router.get("/event/:id", (req, res) => {
   const eventId = req.params.id;
 

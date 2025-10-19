@@ -3,7 +3,7 @@ const prevBtn = document.querySelector('.carousel-btn.prev');
 const nextBtn = document.querySelector('.carousel-btn.next');
 
 let scrollAmount = 0;
-const scrollStep = 320; // width of card + gap
+const scrollStep = 320;
 
 prevBtn.addEventListener('click', () => {
     scrollAmount = Math.max(scrollAmount - scrollStep, 0);

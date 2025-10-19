@@ -1,11 +1,10 @@
-// search.js
 
 const form = document.getElementById("search-form");
 const resultsContainer = document.getElementById("search-results");
 const clearBtn = document.getElementById("clear-btn");
 const categorySelect = document.getElementById("category");
 
-// 1️ Load categories into dropdown
+// Load categories in search in dropdown
 async function loadCategories() {
     try {
         const response = await fetch("/api/categories");
@@ -23,10 +22,10 @@ async function loadCategories() {
     }
 }
 
-// Call it on page load
+//Call function in the search page
 loadCategories();
 
-//  Helper function to render events
+//  Prompt message in case no events are found
 function renderEvents(events) {
     if (!events || events.length === 0) {
         resultsContainer.innerHTML = "<p>No events found.</p>";
@@ -70,7 +69,7 @@ form.addEventListener("submit", async (e) => {
     }
 });
 
-//CLear list button
+//CLear list button function
 clearBtn.addEventListener("click", () => {
     form.reset();
     resultsContainer.innerHTML = "";
