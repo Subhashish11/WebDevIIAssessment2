@@ -26,7 +26,7 @@ async function loadCategories() {
 // Call it on page load
 loadCategories();
 
-// 2️ Helper function to render events
+//  Helper function to render events
 function renderEvents(events) {
     if (!events || events.length === 0) {
         resultsContainer.innerHTML = "<p>No events found.</p>";
@@ -45,7 +45,7 @@ function renderEvents(events) {
     `).join("");
 }
 
-// 3️ Handle form submission
+//Search form submission
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -70,7 +70,7 @@ form.addEventListener("submit", async (e) => {
     }
 });
 
-// 4️Handle clear button
+//CLear list button
 clearBtn.addEventListener("click", () => {
     form.reset();
     resultsContainer.innerHTML = "";

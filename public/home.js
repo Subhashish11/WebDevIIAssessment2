@@ -1,44 +1,54 @@
-// home.js
+const track = document.getElementById('events-list');
+const prevBtn = document.querySelector('.carousel-btn.prev');
+const nextBtn = document.querySelector('.carousel-btn.next');
 
-const eventsList = document.getElementById("events-list");
+let scrollAmount = 0;
+const scrollStep = 320; // width of card + gap
 
-// Fetch upcoming events from API
+prevBtn.addEventListener('click', () => {
+    scrollAmount = Math.max(scrollAmount - scrollStep, 0);
+    track.style.transform = `translateX(-${scrollAmount}px)`;
+});
+
+nextBtn.addEventListener('click', () => {
+    scrollAmount = Math.min(scrollAmount + scrollStep, track.scrollWidth - track.offsetWidth);
+    track.style.transform = `translateX(-${scrollAmount}px)`;
+});
+
+// Fetch upcoming events from API and generate cards
 async function loadUpcomingEvents() {
-  try {
-    const response = await fetch("/api/event/upcoming");
-    if (!response.ok) throw new Error("Network response was not ok");
+    try {
+        const response = await fetch("/api/event/upcoming");
+        if (!response.ok) throw new Error("Network response was not ok");
 
-    const events = await response.json();
+        const events = await response.json();
+        track.innerHTML = ""; // clear previous content
 
-    // Clear existing content
-    eventsList.innerHTML = "";
+        if (events.length === 0) {
+            track.innerHTML = "<p>No upcoming events.</p>";
+            return;
+        }
 
-    if (events.length === 0) {
-      eventsList.innerHTML = "<p>No upcoming events.</p>";
-      return;
+        events.forEach(event => {
+            const card = document.createElement("div");
+            card.classList.add("event-card");
+
+            card.innerHTML = `
+                <img src="${event.image_url}" alt="${event.event_name}">
+                <div class="event-info">
+                    <h3>${event.event_name}</h3>
+                    <p>${event.event_description}</p>
+                    <p><strong>Date:</strong> ${new Date(event.event_date).toLocaleDateString()}</p>
+                    <p><strong>Location:</strong> ${event.location}</p>
+                    <a href="event.html?id=${event.event_id}" style="color:white;">View Details</a>
+                </div>
+            `;
+            track.appendChild(card);
+        });
+    } catch (error) {
+        console.error("Error loading events:", error);
+        track.innerHTML = "<p>Failed to load events.</p>";
     }
-
-    // Loop through events and render
-    events.forEach(event => {
-      const eventDiv = document.createElement("div");
-      eventDiv.classList.add("event-item");
-
-      eventDiv.innerHTML = `
-        <h3>${event.event_name}</h3>
-        <p><strong>Date:</strong> ${new Date(event.event_date).toLocaleDateString()}</p>
-        <p><strong>Location:</strong> ${event.location}</p>
-        <p><strong>Category:</strong> ${event.category_name}</p>
-        <p>${event.event_description}</p>
-        <a href="event.html?id=${event.event_id}">View Details</a>
-      `;
-
-      eventsList.appendChild(eventDiv);
-    });
-
-  } catch (error) {
-    console.error("Error loading events:", error);
-    eventsList.innerHTML = "<p>Failed to load events.</p>";
-  }
 }
 
 // Run on page load
