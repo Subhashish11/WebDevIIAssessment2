@@ -6,15 +6,16 @@ let scrollAmount = 0;
 const scrollStep = 320;
 
 prevBtn.addEventListener('click', () => {
-    scrollAmount = Math.max(scrollAmount - scrollStep, 0);
-    track.style.transform = `translateX(-${scrollAmount}px)`;
+  if (index > 0) index--;
+  updateCarousel();
 });
 
 nextBtn.addEventListener('click', () => {
-    scrollAmount = Math.min(scrollAmount + scrollStep, track.scrollWidth - track.offsetWidth);
-    track.style.transform = `translateX(-${scrollAmount}px)`;
+  const totalCards = track.children.length;
+  const maxIndex = Math.max(0, totalCards - maxVisible);
+  if (index < maxIndex) index++;
+  updateCarousel();
 });
-
 // Fetch upcoming events from API and generate cards
 async function loadUpcomingEvents() {
     try {
@@ -28,21 +29,22 @@ async function loadUpcomingEvents() {
             track.innerHTML = "<p>No upcoming events.</p>";
             return;
         }
+//limiting the upcoming events to 5 for tidyness
+         const limitedEvents = events.slice(0, 5);
 
-        events.forEach(event => {
-            const card = document.createElement("div");
-            card.classList.add("event-card");
+            limitedEvents.forEach(event => {
+              const card = document.createElement("div");
+              card.classList.add("event-card");
 
-            card.innerHTML = `
+              card.innerHTML = `
                 <img src="${event.image_url}" alt="${event.event_name}">
                 <div class="event-info">
-                    <h3>${event.event_name}</h3>
-                    <p>${event.event_description}</p>
-                    <p><strong>Date:</strong> ${new Date(event.event_date).toLocaleDateString()}</p>
-                    <p><strong>Location:</strong> ${event.location}</p>
-                    <a href="event.html?id=${event.event_id}" style="color:white;">View Details</a>
+                  <h3>${event.event_name}</h3>
+                  <p><strong>Date:</strong> ${new Date(event.event_date).toLocaleDateString()}</p>
+                  <p><strong>Location:</strong> ${event.location}</p>
+                  <a href="event.html?id=${event.event_id}" style="color:#007BFF;">View Details</a>
                 </div>
-            `;
+              `;
             track.appendChild(card);
         });
     } catch (error) {

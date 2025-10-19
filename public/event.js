@@ -1,6 +1,6 @@
 const eventContainer = document.getElementById('event-details');
 
-// Get the event ID from URL query string
+// Get the event ID from URL query string, e.g., event.html?id=3
 const urlParams = new URLSearchParams(window.location.search);
 const eventId = urlParams.get('id');
 
@@ -14,13 +14,14 @@ if (!eventId) {
     })
     .then(event => {
       const eventEl = document.createElement('div');
-      eventEl.classList.add('event-item', 'event-details'); // centered, styled container
+      eventEl.classList.add('event-details');
 
-      // fallback values
-      const ticketPrice = event.ticket_price ? `$${event.ticket_price}` : "Free";
-      const goal = event.goal_amount || 0;
-      const raised = event.raised_amount || 0;
-      const progress = goal > 0 ? Math.min((raised / goal) * 100, 100) : 0;
+      // Use defaults if values are missing
+      const ticketPrice = event.ticket_price != null ? `$${event.ticket_price}` : "Free";
+      const fundCollected = event.fund_collected != null ? `$${event.fund_collected}` : "$0";
+      const fundraiserGoal = event.fundraiser_goal != null ? `$${event.fundraiser_goal}` : "$0";
+      const organiser = event.organiser_name || "N/A";
+      const contact = event.contact || "N/A";
 
       eventEl.innerHTML = `
         <h2>${event.event_name}</h2>
@@ -28,12 +29,18 @@ if (!eventId) {
         <p><strong>Date:</strong> ${new Date(event.event_date).toLocaleDateString()}</p>
         <p><strong>Location:</strong> ${event.location}</p>
         <p><strong>Category:</strong> ${event.category_name}</p>
-        <p>${event.event_description}</p>
+        <p><strong>Description:</strong> ${event.event_description}</p>
 
-        <hr>
+        <h3>Ticket Information</h3>
+        <p><strong>Price:</strong> ${ticketPrice}</p>
 
-        <p><strong>Ticket Price:</strong> ${ticketPrice}</p>
-        <p><strong>Goal Progress:</strong> ${raised} raised out of ${goal} (${progress.toFixed(0)}%)</p>
+        <h3>Fundraiser</h3>
+        <p><strong>Collected:</strong> ${fundCollected}</p>
+        <p><strong>Goal:</strong> ${fundraiserGoal}</p>
+
+        <h3>Organizer</h3>
+        <p>${organiser}</p>
+        <p>Contact: ${contact}</p>
 
         <button onclick="alert('This feature is currently under construction')">Register</button>
       `;
