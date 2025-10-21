@@ -16,6 +16,7 @@ nextBtn.addEventListener('click', () => {
   if (index < maxIndex) index++;
   updateCarousel();
 });
+
 // Fetch upcoming events from API and generate cards
 async function loadUpcomingEvents() {
     try {

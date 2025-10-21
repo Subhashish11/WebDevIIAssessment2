@@ -41,14 +41,44 @@ if (!eventId) {
         <h3>Organizer</h3>
         <p>${organiser}</p>
         <p>Contact: ${contact}</p>
-
+<!--previous register button
         <button onclick="alert('This feature is currently under construction')">Register</button>
-      `;
+
+-->
+<button id="register-btn">Register</button>
+<ul id="registration-list"></ul>
+`;
+
 
       eventContainer.appendChild(eventEl);
+
+//updated register button functionality
+document.getElementById("register-btn").addEventListener("click",()=>{
+window.location.href=`registration.html?event_id=${eventId}`;
+});
+
     })
     .catch(err => {
       console.error("Error fetching event:", err);
       eventContainer.innerHTML = "<p>Failed to load event details.</p>";
     });
 }
+
+
+
+
+
+//fetch event data of registration
+fetch(`api/events/${eventId}/registrations`)
+.then(res=>res.json())
+.then(data=>{
+const regContainer=document.getElementById("registration-list");
+//sort  by purchase date
+data.sort((a,b)=>new Date(b.purchase_date)-new Date(a.purchase_date));
+data.forEach(reg=>{
+const li=document.createElement("li");
+li.textContent=`${reg.user_name}(${reg.contact_email})-${reg.tickets} tickets`;
+regContainer.appendChild(li);
+});
+})
+.catch(err=>console.error("registration not found or error was found!!",err));
