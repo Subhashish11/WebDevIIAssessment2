@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const eventDB = require("../event_db");
+const db=require("../event_db");
 
 // upcoming events
 router.get("/event/upcoming", (req, res) => {
@@ -67,3 +68,28 @@ router.get("/categories", (req, res) => {
 });
 
 module.exports = router;
+
+//POST registrations
+router.post("/registrations",(req,res)=>{
+const{event_id, user_name, contact_email,tickets}=req.body;
+
+if(!event_id||!user_name||!contact_email||!tickets){
+return res.status(400).json({error:"Missing information fields!"});
+}
+
+const sql=
+`INSERT INTO registrations (event_id,user_name,contact_email,tickets)
+VALUES(?,?,?,?)
+`;
+
+db.query(sql,[event_id,user_name,contact_email,tickets],(err,result)=>{
+if(err){
+console,error("error inserting registrations:",err);
+return res.status(500).json({error:"Database error"});
+}
+res.status(201).json({
+message:"Registration added succesfully!!",
+registration_id:result.insertId,
+});
+});
+});

@@ -2,6 +2,7 @@ require("dotenv").config();
 //initialising express for flexibility in coding
 const express = require("express");
 //implementing CORS to prevent cross-origin erors from other domains
+const path=require("path");
 
 const cors = require("cors");
 
@@ -22,3 +23,9 @@ app.use("/api", charityAPI);
 // Start server
 const PORT = process.env.PORT||3030;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+//server admin folder
+app.use("/admin",express.static(path.join(__dirname,"admin")));
+
+const adminRouter=require("./controllerAPI/admin-controller");
+app.use("/admin/api",adminRouter);
